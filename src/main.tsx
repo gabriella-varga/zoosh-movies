@@ -2,9 +2,26 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
+import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
+import { ApolloProvider } from "@apollo/client/react";
+import { ThemeProvider, CssBaseline } from '@mui/material';
+import theme from './theme';
+
+const client = new ApolloClient({
+    link: new HttpLink({ 
+        uri: '/api',
+        fetch: fetch 
+    }),
+    cache: new InMemoryCache(),
+});
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+    <StrictMode>
+        <ApolloProvider client={client}>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <App/>
+            </ThemeProvider>
+        </ApolloProvider>
+    </StrictMode>,
 )
