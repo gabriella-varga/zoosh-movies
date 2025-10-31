@@ -1,13 +1,27 @@
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
-    palette: { mode: 'dark' },
-    shape: { borderRadius: 12 },
-    typography: { fontFamily: 'Inter, system-ui, Roboto, Arial, sans-serif' },
-    components: {
-        MuiButton: { styleOverrides: { root: { textTransform: 'none', borderRadius: 12 } } },
-        MuiCard: { styleOverrides: { root: { borderRadius: 12 } } },
+    palette: {
+      mode: 'dark',
+      background: {
+        default: '#121212',
+        paper: '#1E1E1E',
+      },
+      primary: { main: '#FFB300' },
+      secondary: { main: '#BB86FC' },
+      text: {
+        primary: '#E0E0E0',
+        secondary: '#9E9E9E',
+      },
+      divider: '#2C2C2C',
     },
-});
+    components: {
+      MuiAppBar: {
+        styleOverrides: {
+          root: { backgroundColor: '#181818' },
+        },
+      },
+    },
+  });
 
 export default theme;
