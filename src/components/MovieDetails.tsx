@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Card, CardContent, Typography, Chip, Button } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import type { Movie } from '../../types';
+import type { Movie } from '../types';
 
 interface MovieDetailsProps {
   movie: Movie | null;

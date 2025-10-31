@@ -3,7 +3,7 @@ import { GET_RELATED_MOVIES, SEARCH_MOVIES } from './graphql/queries';
 import './App.css';
 import { useQuery } from "@apollo/client/react";
 import { Container, Box, Typography, Grid } from "@mui/material";
-import type { Movie } from "../types";
+import type { Movie } from "./types";
 import SearchBox from './components/SearchBox';
 import MovieList from './components/MovieList';
 import MovieDetails from './components/MovieDetails';

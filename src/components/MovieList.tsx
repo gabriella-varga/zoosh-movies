@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, List, ListItem, ListItemButton, Typography, CircularProgress, Alert } from '@mui/material';
-import type { Movie } from '../../types';
+import type { Movie } from '../types';
 
 interface MovieListProps {
   movies: Movie[];
