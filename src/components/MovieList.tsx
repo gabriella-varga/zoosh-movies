@@ -1,6 +1,19 @@
 import React from 'react';
-import { Box, List, ListItem, ListItemButton, Typography, CircularProgress, Alert } from '@mui/material';
+import { 
+  Box, 
+  List, 
+  ListItem, 
+  ListItemButton, 
+  Typography, 
+  CircularProgress, 
+  Alert,
+  Chip,
+  Stack,
+  Divider
+} from '@mui/material';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import type { Movie } from '../types';
+import MovieRating from './MovieRating';
 
 interface MovieListProps {
   movies: Movie[];
@@ -27,41 +40,119 @@ const MovieList: React.FC<MovieListProps> = ({ movies, onMovieClick, isLoading =
 
   return (
     <List sx={{ width: '100%' }}>
-      {movies.map((movie) => {
-        const category = movie.genres?.map(g => g.name).join(', ') || 'Unknown';
-        const score = movie.score !== null && movie.score !== undefined 
-          ? movie.score.toFixed(1) 
-          : 'N/A';
+      {movies.map((movie, index) => {
+        const releaseYear = movie.releaseDate 
+          ? new Date(movie.releaseDate).getFullYear() 
+          : null;
 
         return (
-          <ListItem key={movie.id} disablePadding sx={{ mb: 1 }}>
-            <ListItemButton
-              onClick={() => onMovieClick(movie)}
-              sx={{
-                border: '1px solid',
-                borderColor: 'divider',
-                borderRadius: 2,
-                py: 2,
-                '&:hover': {
-                  backgroundColor: 'action.hover',
-                },
-              }}
-            >
-              <Box sx={{ width: '100%' }}>
-                <Typography variant="h6" component="div" sx={{ fontWeight: 600, mb: 1 }}>
-                  {movie.name}
-                </Typography>
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                  <Typography variant="body2" color="text.secondary">
-                    <strong>Category:</strong> {category}
+          <React.Fragment key={movie.id}>
+            <ListItem disablePadding sx={{ mb: 2 }}>
+              <ListItemButton
+                onClick={() => onMovieClick(movie)}
+                sx={{
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  borderRadius: 2,
+                  p: 2,
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                  '&:hover': {
+                    backgroundColor: 'action.hover',
+                    borderColor: 'primary.main',
+                  },
+                  transition: 'all 0.2s ease-in-out',
+                }}
+              >
+                {/* Title Section */}
+                <Box sx={{ width: '100%', mb: 1.5 }}>
+                  <Typography 
+                    variant="h6" 
+                    component="div" 
+                    sx={{ 
+                      fontWeight: 600, 
+                      mb: 0.5,
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    {movie.name}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    <strong>Score:</strong> {score}
-                  </Typography>
+                  {movie.tagline && (
+                    <Typography 
+                      variant="body2" 
+                      color="text.secondary" 
+                      sx={{ fontStyle: 'italic', mt: 0.5 }}
+                    >
+                      "{movie.tagline}"
+                    </Typography>
+                  )}
                 </Box>
-              </Box>
-            </ListItemButton>
-          </ListItem>
+
+                {/* Rating Section */}
+                <Box sx={{ mb: 1.5 }}>
+                  <MovieRating score={movie.score} size="small" />
+                </Box>
+
+                {/* Genres Tags Section */}
+                {movie.genres && movie.genres.length > 0 && (
+                  <Stack 
+                    direction="row" 
+                    spacing={0.5} 
+                    sx={{ mb: 1.5, flexWrap: 'wrap', gap: 0.5 }}
+                  >
+                    {movie.genres.map((genre) => (
+                      <Chip
+                        key={genre.id}
+                        label={genre.name}
+                        size="small"
+                        sx={{
+                          backgroundColor: 'primary.dark',
+                          color: 'primary.contrastText',
+                          fontSize: '0.75rem',
+                          height: 24,
+                        }}
+                      />
+                    ))}
+                  </Stack>
+                )}
+
+                {/* Metadata Tags Section */}
+                <Stack 
+                  direction="row" 
+                  spacing={1} 
+                  sx={{ flexWrap: 'wrap', gap: 1 }}
+                  divider={<Divider orientation="vertical" flexItem />}
+                >
+                  {releaseYear && (
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                      <CalendarTodayIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
+                      <Typography variant="caption" color="text.secondary">
+                        {releaseYear}
+                      </Typography>
+                    </Box>
+                  )}
+                  {movie.runtime && (
+                    <Typography variant="caption" color="text.secondary">
+                      {movie.runtime} min
+                    </Typography>
+                  )}
+                  {movie.adult && (
+                    <Chip
+                      label="18+"
+                      size="small"
+                      sx={{
+                        height: 20,
+                        fontSize: '0.65rem',
+                        backgroundColor: 'error.dark',
+                        color: 'error.contrastText',
+                      }}
+                    />
+                  )}
+                </Stack>
+              </ListItemButton>
+            </ListItem>
+            {index < movies.length - 1 && <Divider sx={{ my: 1, opacity: 0.3 }} />}
+          </React.Fragment>
         );
       })}
     </List>
