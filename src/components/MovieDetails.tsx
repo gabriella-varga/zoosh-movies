@@ -1,7 +1,22 @@
 import React from 'react';
-import { Box, Card, CardContent, Typography, Chip, Button } from '@mui/material';
+import { 
+  Box, 
+  Card, 
+  CardContent, 
+  Typography, 
+  Chip, 
+  Button,
+  Stack,
+  Divider,
+  Paper
+} from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import LanguageIcon from '@mui/icons-material/Language';
+import PublicIcon from '@mui/icons-material/Public';
 import type { Movie } from '../types';
+import MovieRating from './MovieRating';
 
 interface MovieDetailsProps {
   movie: Movie | null;
@@ -13,7 +28,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
     return (
       <Card>
         <CardContent>
-          <Typography variant="body1" color="text.secondary">
+          <Typography variant="body1" color="text.secondary" align="center" sx={{ py: 4 }}>
             Select a movie to see details
           </Typography>
         </CardContent>
@@ -21,80 +36,197 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
     );
   }
 
-  const category = movie.genres?.map(g => g.name).join(', ') || 'Unknown';
-  const score = movie.score !== null && movie.score !== undefined 
-    ? movie.score.toFixed(1) 
-    : 'N/A';
+  const releaseYear = movie.releaseDate 
+    ? new Date(movie.releaseDate).getFullYear() 
+    : null;
+  const releaseDate = movie.releaseDate
+    ? new Date(movie.releaseDate).toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      })
+    : null;
 
   return (
-    <Card sx={{ height: '100%' }}>
-      <CardContent>
+    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <CardContent sx={{ flexGrow: 1 }}>
         {onBack && (
           <Button
             variant="outlined"
             size="small"
             startIcon={<ArrowBackIcon />}
             onClick={onBack}
-            sx={{ mb: 2 }}
+            sx={{ mb: 3 }}
           >
             Back to Results
           </Button>
         )}
         
-        <Typography variant="h4" component="h2" gutterBottom sx={{ fontWeight: 600 }}>
-          {movie.name}
-        </Typography>
-
-        <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
-          <Box>
-            <Typography variant="body2" color="text.secondary" gutterBottom>
-              Category
+        {/* Title Section */}
+        <Box sx={{ mb: 3 }}>
+          <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+            {movie.name}
+          </Typography>
+          {movie.tagline && (
+            <Typography 
+              variant="h6" 
+              color="text.secondary" 
+              sx={{ 
+                fontStyle: 'italic', 
+                mt: 1,
+                fontWeight: 400,
+              }}
+            >
+              "{movie.tagline}"
             </Typography>
-            <Typography variant="body1" fontWeight={500}>
-              {category}
-            </Typography>
-          </Box>
-          <Box>
-            <Typography variant="body2" color="text.secondary" gutterBottom>
-              Score
-            </Typography>
-            <Typography variant="body1" fontWeight={500}>
-              {score}
-            </Typography>
-          </Box>
-          {movie.releaseDate && (
-            <Box>
-              <Typography variant="body2" color="text.secondary" gutterBottom>
-                Release Date
-              </Typography>
-              <Typography variant="body1" fontWeight={500}>
-                {new Date(movie.releaseDate).getFullYear()}
-              </Typography>
-            </Box>
           )}
         </Box>
 
+        <Divider sx={{ my: 3 }} />
+
+        {/* Rating Section */}
+        <Box sx={{ mb: 3 }}>
+          <Typography variant="overline" color="text.secondary" sx={{ mb: 1, display: 'block' }}>
+            Rating
+          </Typography>
+          <MovieRating score={movie.score} size="large" showStars />
+          {movie.votes && (
+            <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>
+              ({movie.votes.toLocaleString()} votes)
+            </Typography>
+          )}
+        </Box>
+
+        <Divider sx={{ my: 3 }} />
+
+        {/* Genres Section */}
         {movie.genres && movie.genres.length > 0 && (
-          <Box sx={{ mb: 2 }}>
-            {movie.genres.map((genre) => (
-              <Chip
-                key={genre.id}
-                label={genre.name}
-                size="small"
-                sx={{ mr: 1, mb: 1 }}
-              />
-            ))}
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="overline" color="text.secondary" sx={{ mb: 1.5, display: 'block' }}>
+              Genres
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
+              {movie.genres.map((genre) => (
+                <Chip
+                  key={genre.id}
+                  label={genre.name}
+                  sx={{
+                    backgroundColor: 'primary.dark',
+                    color: 'primary.contrastText',
+                    fontWeight: 500,
+                  }}
+                />
+              ))}
+            </Stack>
           </Box>
         )}
 
+        <Divider sx={{ my: 3 }} />
+
+        {/* Metadata Tags Section */}
+        <Box sx={{ mb: 3 }}>
+          <Typography variant="overline" color="text.secondary" sx={{ mb: 1.5, display: 'block' }}>
+            Details
+          </Typography>
+          <Stack spacing={1.5}>
+            {releaseDate && (
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <CalendarTodayIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
+                <Box>
+                  <Typography variant="caption" color="text.secondary" display="block">
+                    Release Date
+                  </Typography>
+                  <Typography variant="body2" fontWeight={500}>
+                    {releaseDate} {releaseYear && `(${releaseYear})`}
+                  </Typography>
+                </Box>
+              </Box>
+            )}
+            {movie.runtime && (
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <AccessTimeIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
+                <Box>
+                  <Typography variant="caption" color="text.secondary" display="block">
+                    Runtime
+                  </Typography>
+                  <Typography variant="body2" fontWeight={500}>
+                    {movie.runtime} minutes
+                  </Typography>
+                </Box>
+              </Box>
+            )}
+            {movie.languages && movie.languages.length > 0 && (
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <LanguageIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
+                <Box>
+                  <Typography variant="caption" color="text.secondary" display="block">
+                    Languages
+                  </Typography>
+                  <Typography variant="body2" fontWeight={500}>
+                    {movie.languages.map(l => l.name).join(', ')}
+                  </Typography>
+                </Box>
+              </Box>
+            )}
+            {movie.country && movie.country.length > 0 && (
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <PublicIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
+                <Box>
+                  <Typography variant="caption" color="text.secondary" display="block">
+                    Countries
+                  </Typography>
+                  <Typography variant="body2" fontWeight={500}>
+                    {movie.country.map(c => c.name).join(', ')}
+                  </Typography>
+                </Box>
+              </Box>
+            )}
+            {movie.status && (
+              <Box>
+                <Typography variant="caption" color="text.secondary" display="block">
+                  Status
+                </Typography>
+                <Chip
+                  label={movie.status.replace('_', ' ')}
+                  size="small"
+                  sx={{ mt: 0.5 }}
+                />
+              </Box>
+            )}
+            {movie.adult && (
+              <Chip
+                label="18+ Adult Content"
+                size="small"
+                sx={{
+                  backgroundColor: 'error.dark',
+                  color: 'error.contrastText',
+                  alignSelf: 'flex-start',
+                }}
+              />
+            )}
+          </Stack>
+        </Box>
+
+        <Divider sx={{ my: 3 }} />
+
+        {/* Overview Section */}
         {movie.overview && (
           <Box>
-            <Typography variant="body2" color="text.secondary" gutterBottom>
+            <Typography variant="overline" color="text.secondary" sx={{ mb: 1.5, display: 'block' }}>
               Overview
             </Typography>
-            <Typography variant="body1">
-              {movie.overview}
-            </Typography>
+            <Paper 
+              variant="outlined" 
+              sx={{ 
+                p: 2, 
+                backgroundColor: 'background.default',
+                borderColor: 'divider',
+              }}
+            >
+              <Typography variant="body1" sx={{ lineHeight: 1.7 }}>
+                {movie.overview}
+              </Typography>
+            </Paper>
           </Box>
         )}
       </CardContent>
