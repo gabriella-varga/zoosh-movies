@@ -8,7 +8,7 @@ describe('SearchBox', () => {
     const onSearch = vi.fn();
     render(<SearchBox onSearch={onSearch} />);
 
-    const input = screen.getByPlaceholderText('search.placeholder');
+    const input = screen.getByPlaceholderText('Search for movies...');
     await userEvent.type(input, '  Fight Club  ');
 
     const form = input.closest('form');
@@ -23,8 +23,8 @@ describe('SearchBox', () => {
     const onSearch = vi.fn();
     render(<SearchBox onSearch={onSearch} isLoading />);
 
-    const input = screen.getByPlaceholderText('search.placeholder');
-    const button = screen.getByRole('button', { name: 'search.searching' });
+    const input = screen.getByPlaceholderText('Search for movies...');
+    const button = screen.getByRole('button', { name: 'Searching...' });
 
     expect(input).toBeDisabled();
     expect(button).toBeDisabled();

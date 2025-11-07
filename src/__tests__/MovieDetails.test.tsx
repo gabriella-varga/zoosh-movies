@@ -46,7 +46,7 @@ const baseMovie: Movie = {
 describe('MovieDetails', () => {
   it('renders placeholder when no movie is selected', () => {
     render(<MovieDetails movie={null} />);
-    expect(screen.getByText('movieDetails.selectMovie')).toBeInTheDocument();
+    expect(screen.getByText('Select a movie to see details')).toBeInTheDocument();
   });
 
   it('renders movie details and handles actions', async () => {
@@ -64,12 +64,12 @@ describe('MovieDetails', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: 'Fight Club' })).toBeInTheDocument();
     expect(screen.getByText('"Mischief. Mayhem. Soap."')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'movieDetails.backToResults' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Back to Results' })).toBeInTheDocument();
 
-    await userEvent.click(screen.getByRole('button', { name: 'movieDetails.backToResults' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Back to Results' }));
     expect(onBack).toHaveBeenCalledTimes(1);
 
-    await userEvent.click(screen.getByRole('button', { name: 'movieDetails.showRelated' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Related' }));
     expect(onShowRelated).toHaveBeenCalledTimes(1);
 
     expect(mockedFetch).toHaveBeenCalledWith('Fight Club');

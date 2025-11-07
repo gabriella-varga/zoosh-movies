@@ -36,7 +36,7 @@ describe('MovieList', () => {
 
   it('shows empty state when no movies', () => {
     render(<MovieList movies={[]} onMovieClick={vi.fn()} />);
-    expect(screen.getByRole('alert')).toHaveTextContent('movieList.noMoviesFound');
+    expect(screen.getByRole('alert')).toHaveTextContent('No movies found. Try a different search query.');
   });
 
   it('renders movies and handles click', async () => {
@@ -46,7 +46,7 @@ describe('MovieList', () => {
 
     expect(screen.getByText('Fight Club')).toBeInTheDocument();
     expect(screen.getByText('"Mischief. Mayhem. Soap."')).toBeInTheDocument();
-    expect(screen.getByText('139 movieList.minutes')).toBeInTheDocument();
+    expect(screen.getByText(/139\s+min/i)).toBeInTheDocument();
 
     await userEvent.click(screen.getByText('Fight Club'));
 
