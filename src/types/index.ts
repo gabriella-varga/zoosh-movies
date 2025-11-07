@@ -10,12 +10,12 @@ export type Genre = {
 };
 
 export type Country = {
-    id: string;
+    id?: string;
     name: string;
 };
 
 export type Language = {
-    id: string;
+    id?: string;
     name: string;
 };
 
@@ -53,5 +53,6 @@ export type Movie = {
     votes?: number | null;
     poster?: Poster | null;
     backdrop?: Backdrop | null;
+    similar?: Movie[] | null;
 };
 

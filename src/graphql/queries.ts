@@ -12,24 +12,49 @@ export const SEARCH_MOVIES = gql`
       poster {
         small
       }
+      runtime
+      tagline
+      votes
+      adult
     }
   }
 `;
 
 export const GET_RELATED_MOVIES = gql`
-  query MovieDetailsWithSimilar($id: ID!) {
-    movie(id: $id) {
+  query MoviesWithSimilar($ids: [ID!]!, $language: Translations = English, $limit: Int = 20) {
+    movies(ids: $ids, language: $language) {
       id
       name
+      tagline
       overview
       releaseDate
       score
+      runtime
+      status
       genres { id name }
+      languages { name }
+      votes
+      adult
       poster {
+        small
         large
       }
       backdrop {
         large
+      }
+      similar(language: $language, limit: $limit) {
+        id
+        name
+        overview
+        releaseDate
+        score
+        runtime
+        tagline
+        adult
+        genres { id name }
+        poster {
+          small
+        }
       }
     }
   }

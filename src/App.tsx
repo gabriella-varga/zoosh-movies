@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { GET_RELATED_MOVIES, SEARCH_MOVIES } from './graphql/queries';
 import './App.css';
 import { useQuery } from "@apollo/client/react";
@@ -13,8 +13,16 @@ type SearchMoviesData = {
     searchMovies: Movie[];
 };
 
+type MovieWithSimilar = Movie & { similar?: Movie[] | null };
+
 type RelatedMoviesData = {
-    movie: Movie;
+    movies: MovieWithSimilar[];
+};
+
+type RelatedMoviesVars = {
+    ids: string[];
+    language: string;
+    limit: number;
 };
 
 function App() {
@@ -31,10 +39,14 @@ function App() {
         }
     );
 
-    const { data: relatedData, loading: relatedLoading } = useQuery<RelatedMoviesData, { id: string }>(
+    const { data: relatedData, loading: relatedLoading } = useQuery<RelatedMoviesData, RelatedMoviesVars>(
         GET_RELATED_MOVIES,
         {
-            variables: { id: selectedMovie?.id || '' },
+            variables: {
+                ids: selectedMovie ? [selectedMovie.id] : [],
+                language: 'English',
+                limit: 20,
+            },
             skip: !selectedMovie || !isRelatedMode,
         }
     );
@@ -49,16 +61,49 @@ function App() {
         setSelectedMovie(movie);
     };
 
-    const handleBackToSearch = () => {
-        setIsRelatedMode(false);
-        setSelectedMovie(null);
+    const handleShowRelated = () => {
+        if (!selectedMovie) {
+            return;
+        }
+        setIsRelatedMode(true);
     };
 
-    const movies: Movie[] = isRelatedMode
-        ? (relatedData?.movie ? [relatedData.movie] : [])
-        : (searchData?.searchMovies ?? []);
+    const handleBackToSearch = () => {
+        setIsRelatedMode(false);
+    };
+
+    const relatedMovie = useMemo(() => {
+        const list = relatedData?.movies;
+        if (!list || list.length === 0) {
+            return null;
+        }
+        return list[0] ?? null;
+    }, [relatedData?.movies]);
+
+    const movies: Movie[] = useMemo(() => {
+        if (isRelatedMode) {
+            return relatedMovie?.similar ?? [];
+        }
+        return searchData?.searchMovies ?? [];
+    }, [isRelatedMode, relatedMovie, searchData?.searchMovies]);
 
     const isLoading = isRelatedMode ? relatedLoading : searchLoading;
+
+    const selectedMovieDetails: Movie | null = useMemo(() => {
+        if (isRelatedMode) {
+            if (relatedMovie) {
+                return relatedMovie;
+            }
+            return selectedMovie;
+        }
+        return selectedMovie;
+    }, [isRelatedMode, relatedMovie, selectedMovie]);
+
+    const showRelatedButton = Boolean(selectedMovie) && !isRelatedMode;
+
+    const headerLabel = isRelatedMode && selectedMovieDetails
+        ? `${t('app.moviesRelatedTo')} "${selectedMovieDetails.name}"`
+        : t('app.searchResults');
 
     return (
         <Container maxWidth="lg" className="app-container">
@@ -74,9 +119,7 @@ function App() {
                         <Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
                                 <Typography variant="h6">
-                                    {isRelatedMode && selectedMovie
-                                        ? `${t('app.moviesRelatedTo')} "${selectedMovie.name}"`
-                                        : t('app.searchResults')}
+                                    {headerLabel}
                                 </Typography>
                             </Box>
                             <MovieList
@@ -90,8 +133,11 @@ function App() {
                     <Grid size={4}>
                         <Box sx={{ position: 'sticky', top: 24, maxHeight: 'calc(100vh - 48px)', overflowY: 'auto' }}>
                             <MovieDetails
-                                movie={selectedMovie}
-                                onBack={selectedMovie ? handleBackToSearch : undefined}
+                                movie={selectedMovieDetails}
+                                onBack={isRelatedMode ? handleBackToSearch : undefined}
+                                onShowRelated={showRelatedButton ? handleShowRelated : undefined}
+                                isRelatedMode={isRelatedMode}
+                                relatedLoading={relatedLoading}
                             />
                         </Box>
                     </Grid>

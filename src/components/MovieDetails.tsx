@@ -28,6 +28,9 @@ import { fetchWikipediaSummary, type WikipediaSummary } from '../services/wikipe
 type MovieDetailsProps = {
   movie: Movie | null;
   onBack?: () => void;
+  onShowRelated?: () => void;
+  isRelatedMode?: boolean;
+  relatedLoading?: boolean;
 };
 
 const detailItemStyles = {
@@ -41,7 +44,7 @@ const iconStyles = {
   color: 'text.secondary',
 };
 
-export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
+export default function MovieDetails({ movie, onBack, onShowRelated, isRelatedMode = false, relatedLoading = false }: MovieDetailsProps) {
   const { t } = useTranslation();
   const [wikipediaData, setWikipediaData] = useState<WikipediaSummary | null>(null);
   const [wikipediaLoading, setWikipediaLoading] = useState(false);
@@ -49,6 +52,7 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
   useEffect(() => {
     if (!movie) {
       setWikipediaData(null);
+      setWikipediaLoading(false);
       return;
     }
 
@@ -103,32 +107,55 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
       })
     : null;
 
+  const heroImage = movie.backdrop?.large ?? movie.poster?.large ?? movie.poster?.small ?? null;
+
   return (
     <Card className="movie-details-card">
-      {movie.backdrop?.large && (
+      {heroImage && (
         <CardMedia
           component="img"
-          image={movie.backdrop.large}
+          image={heroImage}
           alt={movie.name}
           className="movie-backdrop"
         />
       )}
       
       <CardContent sx={{ flexGrow: 1, position: 'relative' }}>
-        {onBack && (
-          <Button
-            variant="outlined"
-            size="small"
-            startIcon={<ArrowBackIcon />}
-            onClick={onBack}
-            sx={{ mb: 3 }}
-          >
-            {t('movieDetails.backToResults')}
-          </Button>
+        {(onBack || onShowRelated) && (
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, gap: 2 }}>
+            {onBack && (
+              <Button
+                variant="outlined"
+                size="small"
+                startIcon={<ArrowBackIcon />}
+                onClick={onBack}
+              >
+                {t('movieDetails.backToResults')}
+              </Button>
+            )}
+            {onShowRelated && !isRelatedMode && (
+              <Button
+                variant="contained"
+                size="small"
+                color="primary"
+                onClick={onShowRelated}
+                disabled={relatedLoading}
+              >
+                {t('movieDetails.showRelated')}
+              </Button>
+            )}
+          </Box>
         )}
         
         <Box sx={{ display: 'flex', gap: 2, mb: 3, alignItems: 'flex-start' }}>
-          {movie.poster?.small ? (
+          {movie.poster?.large ? (
+            <CardMedia
+              component="img"
+              image={movie.poster.large}
+              alt={movie.name}
+              className="movie-poster"
+            />
+          ) : movie.poster?.small ? (
             <CardMedia
               component="img"
               image={movie.poster.small}

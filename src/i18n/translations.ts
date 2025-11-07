@@ -5,6 +5,8 @@ const translations = {
       title: 'Movie Finder',
       searchResults: 'Search Results',
       moviesRelatedTo: 'Movies related to',
+      relatedButton: 'Related',
+      relatedLoading: 'Loading related movies...',
     },
     // SearchBox
     search: {
@@ -38,6 +40,7 @@ const translations = {
       wikipediaLoading: 'Loading Wikipedia summary...',
       wikipediaNotFound: 'No Wikipedia summary found for this movie.',
       wikipediaOpenLink: 'Open on Wikipedia',
+      showRelated: 'Related',
     },
     // Common
     common: {
