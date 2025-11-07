@@ -71,8 +71,8 @@ function App() {
 
                 <Grid container spacing={3}>
                     <Grid size={8}>
-                        <Box className="movies-section">
-                            <Box className="movies-section-header">
+                        <Box>
+                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
                                 <Typography variant="h6">
                                     {isRelatedMode && selectedMovie
                                         ? `${t('app.moviesRelatedTo')} "${selectedMovie.name}"`
@@ -88,10 +88,12 @@ function App() {
                     </Grid>
 
                     <Grid size={4}>
-                        <MovieDetails
-                            movie={selectedMovie}
-                            onBack={selectedMovie ? handleBackToSearch : undefined}
-                        />
+                        <Box sx={{ position: 'sticky', top: 24, maxHeight: 'calc(100vh - 48px)', overflowY: 'auto' }}>
+                            <MovieDetails
+                                movie={selectedMovie}
+                                onBack={selectedMovie ? handleBackToSearch : undefined}
+                            />
+                        </Box>
                     </Grid>
                 </Grid>
             </Box>

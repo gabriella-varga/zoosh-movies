@@ -117,7 +117,6 @@ const theme = createTheme({
               height: '100%',
               display: 'flex',
               flexDirection: 'column',
-              overflow: 'hidden',
             },
           },
         },

@@ -23,39 +23,12 @@ type MovieListProps = {
   isLoading?: boolean;
 };
 
-const titleStyles = {
-  fontWeight: 600,
-  marginBottom: 4,
-  lineHeight: 1.2,
-};
-
-const taglineStyles = {
-  fontStyle: 'italic' as const,
-  marginTop: 4,
-};
-
-const contentBoxStyles = {
-  flexGrow: 1,
-  minWidth: 0,
-};
-
-const sectionBoxStyles = {
-  width: '100%',
-  marginBottom: 0,
-};
-
-const metadataBoxStyles = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: 1.25,
-};
-
 export default function MovieList({ movies, onMovieClick, isLoading = false }: MovieListProps) {
   const { t } = useTranslation();
 
   if (isLoading) {
     return (
-      <Box className="loading-container">
+      <Box sx={{ display: 'flex', justifyContent: 'center', padding: 4 }}>
         <CircularProgress />
       </Box>
     );
@@ -63,7 +36,7 @@ export default function MovieList({ movies, onMovieClick, isLoading = false }: M
 
   if (movies.length === 0) {
     return (
-      <Alert severity="info" className="empty-state">
+      <Alert severity="info" sx={{ marginTop: 2 }}>
         {t('movieList.noMoviesFound')}
       </Alert>
     );
@@ -91,13 +64,21 @@ export default function MovieList({ movies, onMovieClick, isLoading = false }: M
                   <MovieIcon sx={{ fontSize: 40, color: 'text.secondary' }} />
                 </Avatar>
 
-                <Box sx={contentBoxStyles}>
-                  <Box sx={sectionBoxStyles}>
-                    <Typography variant="h6" component="div" sx={titleStyles}>
+                <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+                  <Box sx={{ width: '100%', marginBottom: 0 }}>
+                    <Typography 
+                      variant="h6" 
+                      component="div" 
+                      sx={{ fontWeight: 600, marginBottom: 4, lineHeight: 1.2 }}
+                    >
                       {movie.name}
                     </Typography>
                     {movie.tagline && (
-                      <Typography variant="body2" color="text.secondary" sx={taglineStyles}>
+                      <Typography 
+                        variant="body2" 
+                        color="text.secondary" 
+                        sx={{ fontStyle: 'italic', marginTop: 4 }}
+                      >
                         "{movie.tagline}"
                       </Typography>
                     )}
@@ -127,7 +108,7 @@ export default function MovieList({ movies, onMovieClick, isLoading = false }: M
                     divider={<Divider orientation="vertical" flexItem />}
                   >
                     {releaseYear && (
-                      <Box sx={metadataBoxStyles}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
                         <CalendarTodayIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
                         <Typography variant="caption" color="text.secondary">
                           {releaseYear}

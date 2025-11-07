@@ -3,20 +3,3 @@
   padding: 2rem;
   text-align: center;
 }
-
-.movies-section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
-
-.loading-container {
-  display: flex;
-  justify-content: center;
-  padding: 32px 0;
-}
-
-.empty-state {
-  margin-top: 16px;
-}

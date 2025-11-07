@@ -25,33 +25,6 @@ type MovieDetailsProps = {
   onBack?: () => void;
 };
 
-const posterPlaceholderStyles = {
-  width: 150,
-  height: 225,
-  borderRadius: 2,
-  bgcolor: 'background.paper',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  flexShrink: 0,
-  boxShadow: 3,
-};
-
-const titleHeaderStyles = {
-  fontWeight: 700,
-  lineHeight: 1.2,
-};
-
-const taglineStyles = {
-  fontStyle: 'italic' as const,
-  marginTop: 8,
-  fontWeight: 400,
-};
-
-const sectionHeaderStyles = {
-  display: 'block',
-};
-
 const detailItemStyles = {
   display: 'flex',
   alignItems: 'center',
@@ -122,17 +95,36 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
               className="movie-poster"
             />
           ) : (
-            <Box sx={posterPlaceholderStyles}>
+            <Box sx={{ 
+              width: 150, 
+              height: 225, 
+              borderRadius: 2, 
+              bgcolor: 'background.paper', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              flexShrink: 0, 
+              boxShadow: 3 
+            }}>
               <MovieIcon sx={{ fontSize: 60, color: 'text.secondary' }} />
             </Box>
           )}
           
           <Box sx={{ flexGrow: 1 }}>
-            <Typography variant="h4" component="h1" gutterBottom sx={titleHeaderStyles}>
+            <Typography 
+              variant="h4" 
+              component="h1" 
+              gutterBottom 
+              sx={{ fontWeight: 700, lineHeight: 1.2 }}
+            >
               {movie.name}
             </Typography>
             {movie.tagline && (
-              <Typography variant="h6" color="text.secondary" sx={taglineStyles}>
+              <Typography 
+                variant="h6" 
+                color="text.secondary" 
+                sx={{ fontStyle: 'italic', marginTop: 8, fontWeight: 400 }}
+              >
                 "{movie.tagline}"
               </Typography>
             )}
@@ -142,7 +134,7 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
         <Divider sx={{ my: 3 }} />
 
         <Box sx={{ mb: 3 }}>
-          <Typography variant="overline" color="text.secondary" sx={sectionHeaderStyles}>
+          <Typography variant="overline" color="text.secondary" sx={{ display: 'block' }}>
             {t('movieDetails.rating')}
           </Typography>
           <MovieRating score={movie.score} size="large" showStars />
@@ -157,7 +149,7 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
 
         {movie.genres && movie.genres.length > 0 && (
           <Box sx={{ mb: 3 }}>
-            <Typography variant="overline" color="text.secondary" sx={sectionHeaderStyles}>
+            <Typography variant="overline" color="text.secondary" sx={{ display: 'block' }}>
               {t('movieDetails.genres')}
             </Typography>
             <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
@@ -176,7 +168,7 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
         <Divider sx={{ my: 3 }} />
 
         <Box sx={{ mb: 3 }}>
-          <Typography variant="overline" color="text.secondary" sx={sectionHeaderStyles}>
+          <Typography variant="overline" color="text.secondary" sx={{ display: 'block' }}>
             {t('movieDetails.details')}
           </Typography>
           <Stack spacing={1.5}>
@@ -259,7 +251,7 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
 
         {movie.overview && (
           <Box>
-            <Typography variant="overline" color="text.secondary" sx={sectionHeaderStyles}>
+            <Typography variant="overline" color="text.secondary" sx={{ display: 'block' }}>
               {t('movieDetails.overview')}
             </Typography>
             <Paper variant="outlined" className="overview-paper">
