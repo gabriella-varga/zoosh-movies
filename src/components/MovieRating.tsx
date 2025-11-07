@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography, CircularProgress, Rating } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
+import { useTranslation } from 'react-i18next';
 
 interface MovieRatingProps {
   score: number | null | undefined;
@@ -15,10 +16,12 @@ const MovieRating: React.FC<MovieRatingProps> = ({
   showStars = false,
   size = 'medium'
 }) => {
+  const { t } = useTranslation();
+
   if (score === null || score === undefined) {
     return (
       <Typography variant="body2" color="text.secondary">
-        N/A
+        {t('common.notAvailable')}
       </Typography>
     );
   }

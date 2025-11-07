@@ -16,6 +16,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import MovieIcon from '@mui/icons-material/Movie';
 import type { Movie } from '../types';
 import MovieRating from './MovieRating';
+import { useTranslation } from 'react-i18next';
 
 interface MovieListProps {
   movies: Movie[];
@@ -24,6 +25,8 @@ interface MovieListProps {
 }
 
 const MovieList: React.FC<MovieListProps> = ({ movies, onMovieClick, isLoading = false }) => {
+  const { t } = useTranslation();
+
   if (isLoading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
@@ -35,7 +38,7 @@ const MovieList: React.FC<MovieListProps> = ({ movies, onMovieClick, isLoading =
   if (movies.length === 0) {
     return (
       <Alert severity="info" sx={{ mt: 2 }}>
-        No movies found. Try a different search query.
+        {t('movieList.noMoviesFound')}
       </Alert>
     );
   }
@@ -152,12 +155,12 @@ const MovieList: React.FC<MovieListProps> = ({ movies, onMovieClick, isLoading =
                     )}
                     {movie.runtime && (
                       <Typography variant="caption" color="text.secondary">
-                        {movie.runtime} min
+                        {movie.runtime} {t('movieList.minutes')}
                       </Typography>
                     )}
                     {movie.adult && (
                       <Chip
-                        label="18+"
+                        label={t('movieList.adultContent')}
                         size="small"
                         sx={{
                           height: 20,

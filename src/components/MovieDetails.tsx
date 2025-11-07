@@ -19,6 +19,7 @@ import PublicIcon from '@mui/icons-material/Public';
 import MovieIcon from '@mui/icons-material/Movie';
 import type { Movie } from '../types';
 import MovieRating from './MovieRating';
+import { useTranslation } from 'react-i18next';
 
 interface MovieDetailsProps {
   movie: Movie | null;
@@ -26,12 +27,14 @@ interface MovieDetailsProps {
 }
 
 const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
+  const { t } = useTranslation();
+
   if (!movie) {
     return (
       <Card>
         <CardContent>
           <Typography variant="body1" color="text.secondary" align="center" sx={{ py: 4 }}>
-            Select a movie to see details
+            {t('movieDetails.selectMovie')}
           </Typography>
         </CardContent>
       </Card>
@@ -73,7 +76,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
             onClick={onBack}
             sx={{ mb: 3 }}
           >
-            Back to Results
+            {t('movieDetails.backToResults')}
           </Button>
         )}
         
@@ -134,12 +137,12 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
 
         <Box sx={{ mb: 3 }}>
           <Typography variant="overline" color="text.secondary" sx={{ mb: 1, display: 'block' }}>
-            Rating
+            {t('movieDetails.rating')}
           </Typography>
           <MovieRating score={movie.score} size="large" showStars />
           {movie.votes && (
             <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>
-              ({movie.votes.toLocaleString()} votes)
+              ({movie.votes.toLocaleString()} {t('movieDetails.votes')})
             </Typography>
           )}
         </Box>
@@ -149,7 +152,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
         {movie.genres && movie.genres.length > 0 && (
           <Box sx={{ mb: 3 }}>
             <Typography variant="overline" color="text.secondary" sx={{ mb: 1.5, display: 'block' }}>
-              Genres
+              {t('movieDetails.genres')}
             </Typography>
             <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
               {movie.genres.map((genre) => (
@@ -171,7 +174,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
 
         <Box sx={{ mb: 3 }}>
           <Typography variant="overline" color="text.secondary" sx={{ mb: 1.5, display: 'block' }}>
-            Details
+            {t('movieDetails.details')}
           </Typography>
           <Stack spacing={1.5}>
             {releaseDate && (
@@ -179,7 +182,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
                 <CalendarTodayIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
                 <Box>
                   <Typography variant="caption" color="text.secondary" display="block">
-                    Release Date
+                    {t('movieDetails.releaseDate')}
                   </Typography>
                   <Typography variant="body2" fontWeight={500}>
                     {releaseDate} {releaseYear && `(${releaseYear})`}
@@ -192,10 +195,10 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
                 <AccessTimeIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
                 <Box>
                   <Typography variant="caption" color="text.secondary" display="block">
-                    Runtime
+                    {t('movieDetails.runtime')}
                   </Typography>
                   <Typography variant="body2" fontWeight={500}>
-                    {movie.runtime} minutes
+                    {movie.runtime} {t('movieDetails.minutes')}
                   </Typography>
                 </Box>
               </Box>
@@ -205,7 +208,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
                 <LanguageIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
                 <Box>
                   <Typography variant="caption" color="text.secondary" display="block">
-                    Languages
+                    {t('movieDetails.languages')}
                   </Typography>
                   <Typography variant="body2" fontWeight={500}>
                     {movie.languages.map(l => l.name).join(', ')}
@@ -218,7 +221,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
                 <PublicIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
                 <Box>
                   <Typography variant="caption" color="text.secondary" display="block">
-                    Countries
+                    {t('movieDetails.countries')}
                   </Typography>
                   <Typography variant="body2" fontWeight={500}>
                     {movie.country.map(c => c.name).join(', ')}
@@ -229,7 +232,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
             {movie.status && (
               <Box>
                 <Typography variant="caption" color="text.secondary" display="block">
-                  Status
+                  {t('movieDetails.status')}
                 </Typography>
                 <Chip
                   label={movie.status.replace('_', ' ')}
@@ -240,7 +243,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
             )}
             {movie.adult && (
               <Chip
-                label="18+ Adult Content"
+                label={t('movieDetails.adultContent')}
                 size="small"
                 sx={{
                   backgroundColor: 'error.dark',
@@ -257,7 +260,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
         {movie.overview && (
           <Box>
             <Typography variant="overline" color="text.secondary" sx={{ mb: 1.5, display: 'block' }}>
-              Overview
+              {t('movieDetails.overview')}
             </Typography>
             <Paper 
               variant="outlined" 

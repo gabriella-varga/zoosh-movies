@@ -7,6 +7,7 @@ import type { Movie } from "./types";
 import SearchBox from './components/SearchBox';
 import MovieList from './components/MovieList';
 import MovieDetails from './components/MovieDetails';
+import { useTranslation } from "react-i18next";
 
 interface SearchMoviesData {
     searchMovies: Movie[];
@@ -17,6 +18,7 @@ interface RelatedMoviesData {
 }
 
 function App() {
+    const { t } = useTranslation();
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
     const [isRelatedMode, setIsRelatedMode] = useState(false);
@@ -63,7 +65,7 @@ function App() {
         <Container maxWidth="lg" className="app-container">
             <Box sx={{ my: 4 }}>
                 <Typography variant="h3" component="h1" gutterBottom className="app-title">
-                    Movie Finder
+                    {t('app.title')}
                 </Typography>
 
                 <SearchBox onSearch={handleSearch} isLoading={isLoading} />
@@ -74,8 +76,8 @@ function App() {
                             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
                                 <Typography variant="h6">
                                     {isRelatedMode && selectedMovie
-                                        ? `Movies related to "${selectedMovie.name}"`
-                                        : 'Search Results'}
+                                        ? `${t('app.moviesRelatedTo')} "${selectedMovie.name}"`
+                                        : t('app.searchResults')}
                                 </Typography>
                             </Box>
                             <MovieList

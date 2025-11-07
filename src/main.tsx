@@ -6,6 +6,7 @@ import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import { ApolloProvider } from "@apollo/client/react";
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import theme from './theme';
+import './i18n/i18n';
 
 const client = new ApolloClient({
     link: new HttpLink({ 
