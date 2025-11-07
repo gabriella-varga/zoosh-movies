@@ -21,6 +21,18 @@ export interface Language {
 
 export type ReleaseStatus = 'RELEASED' | 'RUMORED' | 'POST_PRODUCTION' | 'IN_PRODUCTION' | 'PLANNED' | 'CANCELED';
 
+export interface Poster {
+    small?: string | null;
+    medium?: string | null;
+    large?: string | null;
+}
+
+export interface Backdrop {
+    small?: string | null;
+    medium?: string | null;
+    large?: string | null;
+}
+
 export type Movie = {
     id: string;
     name: string;
@@ -39,5 +51,7 @@ export type Movie = {
     popularity?: number | null;
     score?: number | null;
     votes?: number | null;
+    poster?: Poster | null;
+    backdrop?: Backdrop | null;
 };
 

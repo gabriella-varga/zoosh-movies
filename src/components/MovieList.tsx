@@ -9,9 +9,11 @@ import {
   Alert,
   Chip,
   Stack,
-  Divider
+  Divider,
+  Avatar
 } from '@mui/material';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import MovieIcon from '@mui/icons-material/Movie';
 import type { Movie } from '../types';
 import MovieRating from './MovieRating';
 
@@ -55,8 +57,9 @@ const MovieList: React.FC<MovieListProps> = ({ movies, onMovieClick, isLoading =
                   borderColor: 'divider',
                   borderRadius: 2,
                   p: 2,
-                  flexDirection: 'column',
+                  flexDirection: 'row',
                   alignItems: 'flex-start',
+                  gap: 2,
                   '&:hover': {
                     backgroundColor: 'action.hover',
                     borderColor: 'primary.main',
@@ -64,91 +67,108 @@ const MovieList: React.FC<MovieListProps> = ({ movies, onMovieClick, isLoading =
                   transition: 'all 0.2s ease-in-out',
                 }}
               >
-                {/* Title Section */}
-                <Box sx={{ width: '100%', mb: 1.5 }}>
-                  <Typography 
-                    variant="h6" 
-                    component="div" 
-                    sx={{ 
-                      fontWeight: 600, 
-                      mb: 0.5,
-                      lineHeight: 1.2,
-                    }}
-                  >
-                    {movie.name}
-                  </Typography>
-                  {movie.tagline && (
+                {/* Poster Section */}
+                <Avatar
+                  src={movie.poster?.small || undefined}
+                  variant="rounded"
+                  sx={{
+                    width: 80,
+                    height: 120,
+                    bgcolor: 'background.paper',
+                    flexShrink: 0,
+                  }}
+                >
+                  <MovieIcon sx={{ fontSize: 40, color: 'text.secondary' }} />
+                </Avatar>
+
+                {/* Content Section */}
+                <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+                  {/* Title Section */}
+                  <Box sx={{ width: '100%', mb: 1.5 }}>
                     <Typography 
-                      variant="body2" 
-                      color="text.secondary" 
-                      sx={{ fontStyle: 'italic', mt: 0.5 }}
+                      variant="h6" 
+                      component="div" 
+                      sx={{ 
+                        fontWeight: 600, 
+                        mb: 0.5,
+                        lineHeight: 1.2,
+                      }}
                     >
-                      "{movie.tagline}"
+                      {movie.name}
                     </Typography>
+                    {movie.tagline && (
+                      <Typography 
+                        variant="body2" 
+                        color="text.secondary" 
+                        sx={{ fontStyle: 'italic', mt: 0.5 }}
+                      >
+                        "{movie.tagline}"
+                      </Typography>
+                    )}
+                  </Box>
+
+                  {/* Rating Section */}
+                  <Box sx={{ mb: 1.5 }}>
+                    <MovieRating score={movie.score} size="small" />
+                  </Box>
+
+                  {/* Genres Tags Section */}
+                  {movie.genres && movie.genres.length > 0 && (
+                    <Stack 
+                      direction="row" 
+                      spacing={0.5} 
+                      sx={{ mb: 1.5, flexWrap: 'wrap', gap: 0.5 }}
+                    >
+                      {movie.genres.map((genre) => (
+                        <Chip
+                          key={genre.id}
+                          label={genre.name}
+                          size="small"
+                          sx={{
+                            backgroundColor: 'primary.dark',
+                            color: 'primary.contrastText',
+                            fontSize: '0.75rem',
+                            height: 24,
+                          }}
+                        />
+                      ))}
+                    </Stack>
                   )}
-                </Box>
 
-                {/* Rating Section */}
-                <Box sx={{ mb: 1.5 }}>
-                  <MovieRating score={movie.score} size="small" />
-                </Box>
-
-                {/* Genres Tags Section */}
-                {movie.genres && movie.genres.length > 0 && (
+                  {/* Metadata Tags Section */}
                   <Stack 
                     direction="row" 
-                    spacing={0.5} 
-                    sx={{ mb: 1.5, flexWrap: 'wrap', gap: 0.5 }}
+                    spacing={1} 
+                    sx={{ flexWrap: 'wrap', gap: 1 }}
+                    divider={<Divider orientation="vertical" flexItem />}
                   >
-                    {movie.genres.map((genre) => (
+                    {releaseYear && (
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                        <CalendarTodayIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
+                        <Typography variant="caption" color="text.secondary">
+                          {releaseYear}
+                        </Typography>
+                      </Box>
+                    )}
+                    {movie.runtime && (
+                      <Typography variant="caption" color="text.secondary">
+                        {movie.runtime} min
+                      </Typography>
+                    )}
+                    {movie.adult && (
                       <Chip
-                        key={genre.id}
-                        label={genre.name}
+                        label="18+"
                         size="small"
                         sx={{
-                          backgroundColor: 'primary.dark',
-                          color: 'primary.contrastText',
-                          fontSize: '0.75rem',
-                          height: 24,
+                          height: 20,
+                          fontSize: '0.65rem',
+                          backgroundColor: 'error.dark',
+                          color: 'error.contrastText',
                         }}
                       />
-                    ))}
+                    )}
                   </Stack>
-                )}
-
-                {/* Metadata Tags Section */}
-                <Stack 
-                  direction="row" 
-                  spacing={1} 
-                  sx={{ flexWrap: 'wrap', gap: 1 }}
-                  divider={<Divider orientation="vertical" flexItem />}
-                >
-                  {releaseYear && (
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                      <CalendarTodayIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
-                      <Typography variant="caption" color="text.secondary">
-                        {releaseYear}
-                      </Typography>
-                    </Box>
-                  )}
-                  {movie.runtime && (
-                    <Typography variant="caption" color="text.secondary">
-                      {movie.runtime} min
-                    </Typography>
-                  )}
-                  {movie.adult && (
-                    <Chip
-                      label="18+"
-                      size="small"
-                      sx={{
-                        height: 20,
-                        fontSize: '0.65rem',
-                        backgroundColor: 'error.dark',
-                        color: 'error.contrastText',
-                      }}
-                    />
-                  )}
-                </Stack>
+                </Box>
               </ListItemButton>
             </ListItem>
             {index < movies.length - 1 && <Divider sx={{ my: 1, opacity: 0.3 }} />}

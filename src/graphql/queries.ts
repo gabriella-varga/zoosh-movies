@@ -9,6 +9,9 @@ export const SEARCH_MOVIES = gql`
       releaseDate
       score
       genres { id name }
+      poster {
+        small
+      }
     }
   }
 `;
@@ -22,6 +25,12 @@ export const GET_RELATED_MOVIES = gql`
       releaseDate
       score
       genres { id name }
+      poster {
+        large
+      }
+      backdrop {
+        large
+      }
     }
   }
 `;

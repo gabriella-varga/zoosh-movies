@@ -8,13 +8,15 @@ import {
   Button,
   Stack,
   Divider,
-  Paper
+  Paper,
+  CardMedia
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LanguageIcon from '@mui/icons-material/Language';
 import PublicIcon from '@mui/icons-material/Public';
+import MovieIcon from '@mui/icons-material/Movie';
 import type { Movie } from '../types';
 import MovieRating from './MovieRating';
 
@@ -48,8 +50,21 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
     : null;
 
   return (
-    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <CardContent sx={{ flexGrow: 1 }}>
+    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      {movie.backdrop?.large && (
+        <CardMedia
+          component="img"
+          image={movie.backdrop.large}
+          alt={movie.name}
+          sx={{
+            height: 200,
+            objectFit: 'cover',
+            background: 'linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.3))',
+          }}
+        />
+      )}
+      
+      <CardContent sx={{ flexGrow: 1, position: 'relative' }}>
         {onBack && (
           <Button
             variant="outlined"
@@ -62,29 +77,61 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
           </Button>
         )}
         
-        {/* Title Section */}
-        <Box sx={{ mb: 3 }}>
-          <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 700, lineHeight: 1.2 }}>
-            {movie.name}
-          </Typography>
-          {movie.tagline && (
-            <Typography 
-              variant="h6" 
-              color="text.secondary" 
-              sx={{ 
-                fontStyle: 'italic', 
-                mt: 1,
-                fontWeight: 400,
+        <Box sx={{ display: 'flex', gap: 2, mb: 3, alignItems: 'flex-start' }}>
+          {movie.poster?.small ? (
+            <CardMedia
+              component="img"
+              image={movie.poster.small}
+              alt={movie.name}
+              sx={{
+                width: 150,
+                height: 225,
+                borderRadius: 2,
+                objectFit: 'cover',
+                flexShrink: 0,
+                boxShadow: 3,
+              }}
+            />
+          ) : (
+            <Box
+              sx={{
+                width: 150,
+                height: 225,
+                borderRadius: 2,
+                bgcolor: 'background.paper',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+                boxShadow: 3,
               }}
             >
-              "{movie.tagline}"
-            </Typography>
+              <MovieIcon sx={{ fontSize: 60, color: 'text.secondary' }} />
+            </Box>
           )}
+          
+          <Box sx={{ flexGrow: 1 }}>
+            <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+              {movie.name}
+            </Typography>
+            {movie.tagline && (
+              <Typography 
+                variant="h6" 
+                color="text.secondary" 
+                sx={{ 
+                  fontStyle: 'italic', 
+                  mt: 1,
+                  fontWeight: 400,
+                }}
+              >
+                "{movie.tagline}"
+              </Typography>
+            )}
+          </Box>
         </Box>
 
         <Divider sx={{ my: 3 }} />
 
-        {/* Rating Section */}
         <Box sx={{ mb: 3 }}>
           <Typography variant="overline" color="text.secondary" sx={{ mb: 1, display: 'block' }}>
             Rating
@@ -99,7 +146,6 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
 
         <Divider sx={{ my: 3 }} />
 
-        {/* Genres Section */}
         {movie.genres && movie.genres.length > 0 && (
           <Box sx={{ mb: 3 }}>
             <Typography variant="overline" color="text.secondary" sx={{ mb: 1.5, display: 'block' }}>
@@ -123,7 +169,6 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
 
         <Divider sx={{ my: 3 }} />
 
-        {/* Metadata Tags Section */}
         <Box sx={{ mb: 3 }}>
           <Typography variant="overline" color="text.secondary" sx={{ mb: 1.5, display: 'block' }}>
             Details
@@ -209,7 +254,6 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
 
         <Divider sx={{ my: 3 }} />
 
-        {/* Overview Section */}
         {movie.overview && (
           <Box>
             <Typography variant="overline" color="text.secondary" sx={{ mb: 1.5, display: 'block' }}>
