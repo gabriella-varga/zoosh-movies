@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { 
   Box, 
   Card, 
@@ -8,7 +9,9 @@ import {
   Stack,
   Divider,
   Paper,
-  CardMedia
+  CardMedia,
+  CircularProgress,
+  Link
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -16,9 +19,11 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LanguageIcon from '@mui/icons-material/Language';
 import PublicIcon from '@mui/icons-material/Public';
 import MovieIcon from '@mui/icons-material/Movie';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import type { Movie } from '../types';
 import MovieRating from './MovieRating';
 import { useTranslation } from 'react-i18next';
+import { fetchWikipediaSummary, type WikipediaSummary } from '../services/wikipedia';
 
 type MovieDetailsProps = {
   movie: Movie | null;
@@ -38,6 +43,42 @@ const iconStyles = {
 
 export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
   const { t } = useTranslation();
+  const [wikipediaData, setWikipediaData] = useState<WikipediaSummary | null>(null);
+  const [wikipediaLoading, setWikipediaLoading] = useState(false);
+
+  useEffect(() => {
+    if (!movie) {
+      setWikipediaData(null);
+      return;
+    }
+
+    let ignore = false;
+
+    const fetchWikipedia = async () => {
+      setWikipediaLoading(true);
+      try {
+        const summary = await fetchWikipediaSummary(movie.name);
+        if (!ignore) {
+          setWikipediaData(summary);
+        }
+      } catch (error) {
+        console.error('Error fetching Wikipedia data:', error);
+        if (!ignore) {
+          setWikipediaData(null);
+        }
+      } finally {
+        if (!ignore) {
+          setWikipediaLoading(false);
+        }
+      }
+    };
+
+    fetchWikipedia();
+
+    return () => {
+      ignore = true;
+    };
+  }, [movie?.id, movie?.name]);
 
   if (!movie) {
     return (
@@ -250,7 +291,7 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
         <Divider sx={{ my: 3 }} />
 
         {movie.overview && (
-          <Box>
+          <Box sx={{ mb: 3 }}>
             <Typography variant="overline" color="text.secondary" sx={{ display: 'block' }}>
               {t('movieDetails.overview')}
             </Typography>
@@ -261,6 +302,53 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
             </Paper>
           </Box>
         )}
+
+        <Divider sx={{ my: 3 }} />
+
+        <Box>
+          <Typography variant="overline" color="text.secondary" sx={{ display: 'block', mb: 2 }}>
+            {t('movieDetails.wikipedia')}
+          </Typography>
+          {wikipediaLoading && (
+            <Stack direction="row" spacing={1} alignItems="center">
+              <CircularProgress size={20} />
+              <Typography variant="body2" color="text.secondary">
+                {t('movieDetails.wikipediaLoading')}
+              </Typography>
+            </Stack>
+          )}
+          {!wikipediaLoading && wikipediaData && (
+            <>
+              <Paper variant="outlined" className="overview-paper" sx={{ mb: 2 }}>
+                <Typography variant="body2" sx={{ lineHeight: 1.7 }}>
+                  {wikipediaData.extract}
+                </Typography>
+              </Paper>
+              <Link
+                href={wikipediaData.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ 
+                  display: 'inline-flex', 
+                  alignItems: 'center', 
+                  gap: 0.5,
+                  textDecoration: 'none',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                  },
+                }}
+              >
+                {t('movieDetails.wikipediaOpenLink')}
+                <OpenInNewIcon sx={{ fontSize: 16 }} />
+              </Link>
+            </>
+          )}
+          {!wikipediaLoading && !wikipediaData && (
+            <Typography variant="body2" color="text.secondary">
+              {t('movieDetails.wikipediaNotFound')}
+            </Typography>
+          )}
+        </Box>
       </CardContent>
     </Card>
   );

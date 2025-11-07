@@ -34,6 +34,10 @@ const translations = {
       status: 'Status',
       adultContent: '18+ Adult Content',
       overview: 'Overview',
+      wikipedia: 'Wikipedia',
+      wikipediaLoading: 'Loading Wikipedia summary...',
+      wikipediaNotFound: 'No Wikipedia summary found for this movie.',
+      wikipediaOpenLink: 'Open on Wikipedia',
     },
     // Common
     common: {
