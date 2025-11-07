@@ -1,4 +1,3 @@
-import React from 'react';
 import { 
   Box, 
   Card, 
@@ -21,12 +20,12 @@ import type { Movie } from '../types';
 import MovieRating from './MovieRating';
 import { useTranslation } from 'react-i18next';
 
-interface MovieDetailsProps {
+type MovieDetailsProps = {
   movie: Movie | null;
   onBack?: () => void;
-}
+};
 
-const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
+export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
   const { t } = useTranslation();
 
   if (!movie) {
@@ -279,7 +278,5 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBack }) => {
       </CardContent>
     </Card>
   );
-};
-
-export default MovieDetails;
+}
 

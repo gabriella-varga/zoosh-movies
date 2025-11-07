@@ -1,21 +1,20 @@
-import React from 'react';
 import { Box, Typography, CircularProgress, Rating } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import { useTranslation } from 'react-i18next';
 
-interface MovieRatingProps {
+type MovieRatingProps = {
   score: number | null | undefined;
   maxScore?: number;
   showStars?: boolean;
   size?: 'small' | 'medium' | 'large';
-}
+};
 
-const MovieRating: React.FC<MovieRatingProps> = ({ 
+export default function MovieRating({ 
   score, 
   maxScore = 10, 
   showStars = false,
   size = 'medium'
-}) => {
+}: MovieRatingProps) {
   const { t } = useTranslation();
 
   if (score === null || score === undefined) {
@@ -77,7 +76,5 @@ const MovieRating: React.FC<MovieRatingProps> = ({
       </Box>
     </Box>
   );
-};
-
-export default MovieRating;
+}
 

@@ -9,13 +9,13 @@ import MovieList from './components/MovieList';
 import MovieDetails from './components/MovieDetails';
 import { useTranslation } from "react-i18next";
 
-interface SearchMoviesData {
+type SearchMoviesData = {
     searchMovies: Movie[];
-}
+};
 
-interface RelatedMoviesData {
+type RelatedMoviesData = {
     movie: Movie;
-}
+};
 
 function App() {
     const { t } = useTranslation();

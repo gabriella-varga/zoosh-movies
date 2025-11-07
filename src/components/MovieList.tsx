@@ -1,4 +1,3 @@
-import React from 'react';
 import { 
   Box, 
   List, 
@@ -18,13 +17,13 @@ import type { Movie } from '../types';
 import MovieRating from './MovieRating';
 import { useTranslation } from 'react-i18next';
 
-interface MovieListProps {
+type MovieListProps = {
   movies: Movie[];
   onMovieClick: (movie: Movie) => void;
   isLoading?: boolean;
-}
+};
 
-const MovieList: React.FC<MovieListProps> = ({ movies, onMovieClick, isLoading = false }) => {
+export default function MovieList({ movies, onMovieClick, isLoading = false }: MovieListProps) {
   const { t } = useTranslation();
 
   if (isLoading) {
@@ -51,7 +50,7 @@ const MovieList: React.FC<MovieListProps> = ({ movies, onMovieClick, isLoading =
           : null;
 
         return (
-          <React.Fragment key={movie.id}>
+          <div key={movie.id}>
             <ListItem disablePadding sx={{ mb: 2 }}>
               <ListItemButton
                 onClick={() => onMovieClick(movie)}
@@ -175,12 +174,10 @@ const MovieList: React.FC<MovieListProps> = ({ movies, onMovieClick, isLoading =
               </ListItemButton>
             </ListItem>
             {index < movies.length - 1 && <Divider sx={{ my: 1, opacity: 0.3 }} />}
-          </React.Fragment>
+          </div>
         );
       })}
     </List>
   );
-};
-
-export default MovieList;
+}
 

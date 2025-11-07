@@ -1,37 +1,37 @@
-export interface WikipediaPage {
+export type WikipediaPage = {
     title: string;
     extract: string;
     url: string;
-}
+};
 
-export interface Genre {
+export type Genre = {
     id: string;
     name: string;
-}
+};
 
-export interface Country {
+export type Country = {
     id: string;
     name: string;
-}
+};
 
-export interface Language {
+export type Language = {
     id: string;
     name: string;
-}
+};
 
 export type ReleaseStatus = 'RELEASED' | 'RUMORED' | 'POST_PRODUCTION' | 'IN_PRODUCTION' | 'PLANNED' | 'CANCELED';
 
-export interface Poster {
+export type Poster = {
     small?: string | null;
     medium?: string | null;
     large?: string | null;
-}
+};
 
-export interface Backdrop {
+export type Backdrop = {
     small?: string | null;
     medium?: string | null;
     large?: string | null;
-}
+};
 
 export type Movie = {
     id: string;

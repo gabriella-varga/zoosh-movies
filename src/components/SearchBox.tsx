@@ -1,27 +1,31 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { FormEvent, KeyboardEvent } from 'react';
 import { Box, TextField, Button, CircularProgress } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useTranslation } from 'react-i18next';
 
-interface SearchBoxProps {
+type SearchBoxProps = {
   onSearch: (query: string) => void;
   isLoading?: boolean;
-}
+};
 
-const SearchBox: React.FC<SearchBoxProps> = ({ onSearch, isLoading = false }) => {
+export default function SearchBox({ onSearch, isLoading = false }: SearchBoxProps) {
   const { t } = useTranslation();
   const [query, setQuery] = useState<string>('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (query.trim()) {
       onSearch(query.trim());
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      handleSubmit(e);
+      e.preventDefault();
+      if (query.trim()) {
+        onSearch(query.trim());
+      }
     }
   };
 
@@ -49,7 +53,5 @@ const SearchBox: React.FC<SearchBoxProps> = ({ onSearch, isLoading = false }) =>
       </Button>
     </Box>
   );
-};
-
-export default SearchBox;
+}
 
