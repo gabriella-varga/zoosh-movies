@@ -7,10 +7,12 @@ import { ThemeProvider, CssBaseline } from '@mui/material';
 import theme from './theme';
 import './i18n/i18n';
 
+const apiTarget = import.meta.env.VITE_API_TARGET;
+
 const client = new ApolloClient({
-    link: new HttpLink({ 
-        uri: '/api',
-        fetch: fetch 
+    link: new HttpLink({
+        uri: apiTarget,
+        fetch,
     }),
     cache: new InMemoryCache(),
 });
