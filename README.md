@@ -25,7 +25,7 @@ It provides fast search, detailed movie pages with Wikipedia summaries, and a bu
    ```bash
    npm install
    ```
-2. Create a `.env` (or `.env.local`) file containing the API target you want to hit.
+2. Create a `.env` (or `.env.local`) file containing the API target you want to hit. Optionally add your Smartlook key to enable session replay analytics.
    ```bash
    VITE_API_TARGET=...
    ```
@@ -33,7 +33,7 @@ It provides fast search, detailed movie pages with Wikipedia summaries, and a bu
    ```bash
    npm run dev
    ```
-4. Visit the app at `http://localhost:5173`.
+4. Visit the app at `http://localhost:5173` or the hosted demo at [https://zoosh-movies.vercel.app/](https://zoosh-movies.vercel.app/).
 
 ## Available Scripts
 - `npm run dev` – start the Vite dev server.
