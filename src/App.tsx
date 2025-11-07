@@ -54,7 +54,6 @@ function App() {
         setSelectedMovie(null);
     };
 
-    // explicitly type movies so TS knows it's a Movie[]
     const movies: Movie[] = isRelatedMode
         ? (relatedData?.movie ? [relatedData.movie] : [])
         : (searchData?.searchMovies ?? []);

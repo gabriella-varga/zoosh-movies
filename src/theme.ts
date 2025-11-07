@@ -21,6 +21,18 @@ const theme = createTheme({
           root: { backgroundColor: '#181818' },
         },
       },
+      MuiContainer: {
+        styleOverrides: {
+          root: {
+            '&.app-container': {
+              boxShadow: '0 0 40px rgba(255, 179, 0, 0.3), 0 0 80px rgba(255, 179, 0, 0.15)',
+              borderRadius: 24,
+              padding: 24,
+              marginTop: 16,
+            },
+          },
+        },
+      },
     },
   });
 
