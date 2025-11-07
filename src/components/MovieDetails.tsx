@@ -25,6 +25,44 @@ type MovieDetailsProps = {
   onBack?: () => void;
 };
 
+const posterPlaceholderStyles = {
+  width: 150,
+  height: 225,
+  borderRadius: 2,
+  bgcolor: 'background.paper',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexShrink: 0,
+  boxShadow: 3,
+};
+
+const titleHeaderStyles = {
+  fontWeight: 700,
+  lineHeight: 1.2,
+};
+
+const taglineStyles = {
+  fontStyle: 'italic' as const,
+  marginTop: 8,
+  fontWeight: 400,
+};
+
+const sectionHeaderStyles = {
+  display: 'block',
+};
+
+const detailItemStyles = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+};
+
+const iconStyles = {
+  fontSize: 20,
+  color: 'text.secondary',
+};
+
 export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
   const { t } = useTranslation();
 
@@ -52,17 +90,13 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
     : null;
 
   return (
-    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+    <Card className="movie-details-card">
       {movie.backdrop?.large && (
         <CardMedia
           component="img"
           image={movie.backdrop.large}
           alt={movie.name}
-          sx={{
-            height: 200,
-            objectFit: 'cover',
-            background: 'linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.3))',
-          }}
+          className="movie-backdrop"
         />
       )}
       
@@ -85,47 +119,20 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
               component="img"
               image={movie.poster.small}
               alt={movie.name}
-              sx={{
-                width: 150,
-                height: 225,
-                borderRadius: 2,
-                objectFit: 'cover',
-                flexShrink: 0,
-                boxShadow: 3,
-              }}
+              className="movie-poster"
             />
           ) : (
-            <Box
-              sx={{
-                width: 150,
-                height: 225,
-                borderRadius: 2,
-                bgcolor: 'background.paper',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-                boxShadow: 3,
-              }}
-            >
+            <Box sx={posterPlaceholderStyles}>
               <MovieIcon sx={{ fontSize: 60, color: 'text.secondary' }} />
             </Box>
           )}
           
           <Box sx={{ flexGrow: 1 }}>
-            <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+            <Typography variant="h4" component="h1" gutterBottom sx={titleHeaderStyles}>
               {movie.name}
             </Typography>
             {movie.tagline && (
-              <Typography 
-                variant="h6" 
-                color="text.secondary" 
-                sx={{ 
-                  fontStyle: 'italic', 
-                  mt: 1,
-                  fontWeight: 400,
-                }}
-              >
+              <Typography variant="h6" color="text.secondary" sx={taglineStyles}>
                 "{movie.tagline}"
               </Typography>
             )}
@@ -135,7 +142,7 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
         <Divider sx={{ my: 3 }} />
 
         <Box sx={{ mb: 3 }}>
-          <Typography variant="overline" color="text.secondary" sx={{ mb: 1, display: 'block' }}>
+          <Typography variant="overline" color="text.secondary" sx={sectionHeaderStyles}>
             {t('movieDetails.rating')}
           </Typography>
           <MovieRating score={movie.score} size="large" showStars />
@@ -150,7 +157,7 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
 
         {movie.genres && movie.genres.length > 0 && (
           <Box sx={{ mb: 3 }}>
-            <Typography variant="overline" color="text.secondary" sx={{ mb: 1.5, display: 'block' }}>
+            <Typography variant="overline" color="text.secondary" sx={sectionHeaderStyles}>
               {t('movieDetails.genres')}
             </Typography>
             <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
@@ -158,11 +165,8 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
                 <Chip
                   key={genre.id}
                   label={genre.name}
-                  sx={{
-                    backgroundColor: 'primary.dark',
-                    color: 'primary.contrastText',
-                    fontWeight: 500,
-                  }}
+                  className="genre-chip"
+                  sx={{ fontWeight: 500 }}
                 />
               ))}
             </Stack>
@@ -172,13 +176,13 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
         <Divider sx={{ my: 3 }} />
 
         <Box sx={{ mb: 3 }}>
-          <Typography variant="overline" color="text.secondary" sx={{ mb: 1.5, display: 'block' }}>
+          <Typography variant="overline" color="text.secondary" sx={sectionHeaderStyles}>
             {t('movieDetails.details')}
           </Typography>
           <Stack spacing={1.5}>
             {releaseDate && (
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <CalendarTodayIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
+              <Box sx={detailItemStyles}>
+                <CalendarTodayIcon sx={iconStyles} />
                 <Box>
                   <Typography variant="caption" color="text.secondary" display="block">
                     {t('movieDetails.releaseDate')}
@@ -190,8 +194,8 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
               </Box>
             )}
             {movie.runtime && (
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <AccessTimeIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
+              <Box sx={detailItemStyles}>
+                <AccessTimeIcon sx={iconStyles} />
                 <Box>
                   <Typography variant="caption" color="text.secondary" display="block">
                     {t('movieDetails.runtime')}
@@ -203,8 +207,8 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
               </Box>
             )}
             {movie.languages && movie.languages.length > 0 && (
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <LanguageIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
+              <Box sx={detailItemStyles}>
+                <LanguageIcon sx={iconStyles} />
                 <Box>
                   <Typography variant="caption" color="text.secondary" display="block">
                     {t('movieDetails.languages')}
@@ -216,8 +220,8 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
               </Box>
             )}
             {movie.country && movie.country.length > 0 && (
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <PublicIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
+              <Box sx={detailItemStyles}>
+                <PublicIcon sx={iconStyles} />
                 <Box>
                   <Typography variant="caption" color="text.secondary" display="block">
                     {t('movieDetails.countries')}
@@ -244,11 +248,8 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
               <Chip
                 label={t('movieDetails.adultContent')}
                 size="small"
-                sx={{
-                  backgroundColor: 'error.dark',
-                  color: 'error.contrastText',
-                  alignSelf: 'flex-start',
-                }}
+                className="adult-chip-large"
+                sx={{ alignSelf: 'flex-start' }}
               />
             )}
           </Stack>
@@ -258,17 +259,10 @@ export default function MovieDetails({ movie, onBack }: MovieDetailsProps) {
 
         {movie.overview && (
           <Box>
-            <Typography variant="overline" color="text.secondary" sx={{ mb: 1.5, display: 'block' }}>
+            <Typography variant="overline" color="text.secondary" sx={sectionHeaderStyles}>
               {t('movieDetails.overview')}
             </Typography>
-            <Paper 
-              variant="outlined" 
-              sx={{ 
-                p: 2, 
-                backgroundColor: 'background.default',
-                borderColor: 'divider',
-              }}
-            >
+            <Paper variant="outlined" className="overview-paper">
               <Typography variant="body1" sx={{ lineHeight: 1.7 }}>
                 {movie.overview}
               </Typography>

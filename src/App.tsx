@@ -72,7 +72,7 @@ function App() {
                 <Grid container spacing={3}>
                     <Grid size={8}>
                         <Box className="movies-section">
-                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+                            <Box className="movies-section-header">
                                 <Typography variant="h6">
                                     {isRelatedMode && selectedMovie
                                         ? `${t('app.moviesRelatedTo')} "${selectedMovie.name}"`

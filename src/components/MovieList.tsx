@@ -23,12 +23,39 @@ type MovieListProps = {
   isLoading?: boolean;
 };
 
+const titleStyles = {
+  fontWeight: 600,
+  marginBottom: 4,
+  lineHeight: 1.2,
+};
+
+const taglineStyles = {
+  fontStyle: 'italic' as const,
+  marginTop: 4,
+};
+
+const contentBoxStyles = {
+  flexGrow: 1,
+  minWidth: 0,
+};
+
+const sectionBoxStyles = {
+  width: '100%',
+  marginBottom: 0,
+};
+
+const metadataBoxStyles = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 1.25,
+};
+
 export default function MovieList({ movies, onMovieClick, isLoading = false }: MovieListProps) {
   const { t } = useTranslation();
 
   if (isLoading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+      <Box className="loading-container">
         <CircularProgress />
       </Box>
     );
@@ -36,7 +63,7 @@ export default function MovieList({ movies, onMovieClick, isLoading = false }: M
 
   if (movies.length === 0) {
     return (
-      <Alert severity="info" sx={{ mt: 2 }}>
+      <Alert severity="info" className="empty-state">
         {t('movieList.noMoviesFound')}
       </Alert>
     );
@@ -53,91 +80,46 @@ export default function MovieList({ movies, onMovieClick, isLoading = false }: M
           <div key={movie.id}>
             <ListItem disablePadding sx={{ mb: 2 }}>
               <ListItemButton
+                className="movie-item-button"
                 onClick={() => onMovieClick(movie)}
-                sx={{
-                  border: '1px solid',
-                  borderColor: 'divider',
-                  borderRadius: 2,
-                  p: 2,
-                  flexDirection: 'row',
-                  alignItems: 'flex-start',
-                  gap: 2,
-                  '&:hover': {
-                    backgroundColor: 'action.hover',
-                    borderColor: 'primary.main',
-                  },
-                  transition: 'all 0.2s ease-in-out',
-                }}
               >
-                {/* Poster Section */}
                 <Avatar
                   src={movie.poster?.small || undefined}
                   variant="rounded"
-                  sx={{
-                    width: 80,
-                    height: 120,
-                    bgcolor: 'background.paper',
-                    flexShrink: 0,
-                  }}
+                  className="movie-poster-avatar"
                 >
                   <MovieIcon sx={{ fontSize: 40, color: 'text.secondary' }} />
                 </Avatar>
 
-                {/* Content Section */}
-                <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-                  {/* Title Section */}
-                  <Box sx={{ width: '100%', mb: 1.5 }}>
-                    <Typography 
-                      variant="h6" 
-                      component="div" 
-                      sx={{ 
-                        fontWeight: 600, 
-                        mb: 0.5,
-                        lineHeight: 1.2,
-                      }}
-                    >
+                <Box sx={contentBoxStyles}>
+                  <Box sx={sectionBoxStyles}>
+                    <Typography variant="h6" component="div" sx={titleStyles}>
                       {movie.name}
                     </Typography>
                     {movie.tagline && (
-                      <Typography 
-                        variant="body2" 
-                        color="text.secondary" 
-                        sx={{ fontStyle: 'italic', mt: 0.5 }}
-                      >
+                      <Typography variant="body2" color="text.secondary" sx={taglineStyles}>
                         "{movie.tagline}"
                       </Typography>
                     )}
                   </Box>
 
-                  {/* Rating Section */}
                   <Box sx={{ mb: 1.5 }}>
                     <MovieRating score={movie.score} size="small" />
                   </Box>
 
-                  {/* Genres Tags Section */}
                   {movie.genres && movie.genres.length > 0 && (
-                    <Stack 
-                      direction="row" 
-                      spacing={0.5} 
-                      sx={{ mb: 1.5, flexWrap: 'wrap', gap: 0.5 }}
-                    >
+                    <Stack direction="row" spacing={0.5} sx={{ mb: 1.5, flexWrap: 'wrap', gap: 0.5 }}>
                       {movie.genres.map((genre) => (
                         <Chip
                           key={genre.id}
                           label={genre.name}
                           size="small"
-                          sx={{
-                            backgroundColor: 'primary.dark',
-                            color: 'primary.contrastText',
-                            fontSize: '0.75rem',
-                            height: 24,
-                          }}
+                          className="genre-chip"
                         />
                       ))}
                     </Stack>
                   )}
 
-                  {/* Metadata Tags Section */}
                   <Stack 
                     direction="row" 
                     spacing={1} 
@@ -145,7 +127,7 @@ export default function MovieList({ movies, onMovieClick, isLoading = false }: M
                     divider={<Divider orientation="vertical" flexItem />}
                   >
                     {releaseYear && (
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                      <Box sx={metadataBoxStyles}>
                         <CalendarTodayIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
                         <Typography variant="caption" color="text.secondary">
                           {releaseYear}
@@ -161,12 +143,7 @@ export default function MovieList({ movies, onMovieClick, isLoading = false }: M
                       <Chip
                         label={t('movieList.adultContent')}
                         size="small"
-                        sx={{
-                          height: 20,
-                          fontSize: '0.65rem',
-                          backgroundColor: 'error.dark',
-                          color: 'error.contrastText',
-                        }}
+                        className="adult-chip"
                       />
                     )}
                   </Stack>
