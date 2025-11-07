@@ -18,7 +18,6 @@ It provides fast search, detailed movie pages with Wikipedia summaries, and a bu
 - Material UI (MUI) theming and components
 - `react-i18next` for translations
 - Vitest + Testing Library for unit and integration tests
-- Docker + Nginx for production-ready containerisation
 
 ## Getting Started
 1. Install dependencies:
@@ -50,12 +49,15 @@ Latest coverage report (`npm run test:coverage`):
 
 | Metric     | Percentage |
 |------------|------------|
-| Statements | 94.85%     |
-| Branches   | 83.72%     |
+| Statements | 94.99%     |
+| Branches   | 82.94%     |
 | Functions  | 100%       |
-| Lines      | 94.85%     |
+| Lines      | 94.99%     |
 
 The HTML report is emitted to `coverage/index.html`. Open it in a browser for file-by-file detail.
 
 ## Internationalisation
 Translations live in `src/i18n/translations.ts`. New keys can be added there and consumed through the `useTranslation` hook exported by `src/i18n/i18n.ts`. The default language is English, and the system is ready for extension with additional locales.
+
+## Analytics
+ Session replay is powered by [Smartlook](https://www.smartlook.com/). 
