@@ -55,7 +55,7 @@ const theme = createTheme({
         styleOverrides: {
           root: {
             '&.app-container': {
-              boxShadow: `0 0 40px ${COLORS.glow.primary.inner}, 0 0 80px ${COLORS.glow.primary.outer}`,
+              border: `1px solid ${COLORS.text.primary}`,
               borderRadius: 8,
               padding: 24,
               marginTop: 16,
